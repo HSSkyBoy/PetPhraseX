@@ -1,7 +1,6 @@
 package committee.nova.petphrasex.util;
 
 import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 
 public class StringUtil {
@@ -14,18 +13,36 @@ public class StringUtil {
     }
 
     public static int getPunc(String string, int index) {
-        return (!punctuations.contains(string.charAt(index))) ? index : (index == 0) ? -1 : getPunc(string, index - 1);
+        if (StringUtils.isEmpty(string) || index < 0 || index >= string.length()) {
+            return -1;
+        }
+        for (int i = index; i >= 0; i--) {
+            if (!punctuations.contains(string.charAt(i))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public static String fillPetPhraseIn(String original, String petPhrase, List<String> filteredPrefix) {
-        if (original.isEmpty() || original.charAt(0) == '/' || original.charAt(0) == '!') return original;
-
-        for (String s : filteredPrefix) {
-            if (original.contains(s)) return original;
+        if (StringUtils.isEmpty(original) || StringUtils.isEmpty(petPhrase)) {
+            return original;
         }
-        
-        final int index = getLastPunc(original) + 1;
-        if (index == 0) return original;
-        return StringUtils.substring(original, 0, index) + petPhrase + StringUtils.substring(original, index);
+        final char firstChar = original.charAt(0);
+        if (firstChar == '/' || firstChar == '!') {
+            return original;
+        }
+        for (String s : filteredPrefix) {
+            if (StringUtils.isNotEmpty(s) && original.contains(s)) {
+                return original;
+            }
+        }
+        final int lastNonPuncIndex = getLastPunc(original);
+        final int insertIndex = lastNonPuncIndex + 1;
+
+        String prefix = StringUtils.substring(original, 0, insertIndex);
+        String suffix = StringUtils.substring(original, insertIndex);
+
+        return prefix + petPhrase + suffix;
     }
 }
