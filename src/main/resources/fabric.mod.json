@@ -17,7 +17,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "committee.nova.petphrasex.client.PetphraseClient"
+      "committee.nova.petphrasex.client.PetphraseClientX"
+    ],
+    "modmenu": [
+      "committee.nova.petphrasex.client.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -35,7 +38,7 @@
         "modmenu.source": "https://github.com/HSSkyBoy/PetPhraseX",
         "modmenu.modrinth": "https://modrinth.com/mod/petphrasex"
       },
-      "update_checker": false
+      "update_checker": true
     }
  }
 }

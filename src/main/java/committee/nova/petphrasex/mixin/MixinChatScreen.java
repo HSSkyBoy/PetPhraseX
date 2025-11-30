@@ -1,6 +1,6 @@
 package committee.nova.petphrasex.mixin;
 
-import committee.nova.petphrasex.client.PetphraseClient;
+import committee.nova.petphrasex.client.PetphraseClientX;
 import committee.nova.petphrasex.config.Configuration;
 import committee.nova.petphrasex.util.StringUtil;
 import net.minecraft.client.gui.screen.ChatScreen;
@@ -17,7 +17,7 @@ public abstract class MixinChatScreen {
             argsOnly = true
     )
     private String modifyMsg(String chatMessage) {
-        Configuration config = PetphraseClient.getConfig();
+        Configuration config = PetphraseClientX.getConfig();
         return StringUtil.fillPetPhraseIn(
                 chatMessage,
                 config.petPhraseX,
