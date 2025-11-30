@@ -1,0 +1,26 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "AGPL-3.0"
+features={javaVersion="[21,)"}
+
+[[mods]]
+modId = "petphrasex"
+version = "${version}"
+displayName = "PetPhraseX"
+authors = "HSSkyBoy"
+description = "Speak automatically with suffix nya~"
+logoFile = "assets/petphrasex/icon.png"
+
+[[dependencies.petphrasex]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.4,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.petphrasex]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.4,1.21.11]"
+ordering = "NONE"
+side = "BOTH"

@@ -1,14 +1,14 @@
 package committee.nova.petphrasex.util;
 
-import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 public class StringUtil {
-    static final List<Character> punctuations = List.of('!', '?', '.', '(', ')', '！', '？', '。', '（', '）', '~', '”', '“', '‘', '’', '"', '\'');
+    private static final String PUNCTUATION = "!?.,;()！？。，；（）~”\u201C\u2018\u2019\"'";
+
     public static int getLastPunc(String string) {
         if (string == null || string.isEmpty()) return -1;
         for (int i = string.length() - 1; i >= 0; i--) {
-            if (!punctuations.contains(string.charAt(i))) {
+            if (PUNCTUATION.indexOf(string.charAt(i)) == -1) {
                 return i;
             }
         }
@@ -16,12 +16,21 @@ public class StringUtil {
     }
 
     public static String fillPetPhraseIn(String original, String petPhrase, List<String> filteredPrefix) {
-        if (original.isEmpty() || original.charAt(0) == '/' || original.charAt(0) == '!') return original;
+        if (original == null || original.isEmpty()) return original;
 
-        for (String s : filteredPrefix) {
-            if (original.contains(s)) return original;
+        for (String prefix : filteredPrefix) {
+            if (original.startsWith(prefix)) return original;
         }
-        final int index = getLastPunc(original) + 1;
-        return StringUtils.substring(original, 0, index) + petPhrase + StringUtils.substring(original, index);
+
+        final int lastTextIndex = getLastPunc(original);
+        final int insertIndex = lastTextIndex + 1;
+        String phraseToUse = (insertIndex < original.length()) ? petPhrase.trim() : petPhrase;
+
+        StringBuilder sb = new StringBuilder(original.length() + phraseToUse.length());
+        sb.append(original, 0, insertIndex);
+        sb.append(phraseToUse);
+        sb.append(original.substring(insertIndex));
+
+        return sb.toString();
     }
 }
