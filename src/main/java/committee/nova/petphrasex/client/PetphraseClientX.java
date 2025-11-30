@@ -1,28 +1,20 @@
 package committee.nova.petphrasex.client;
 
-import committee.nova.petphrasex.config.Configuration;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
+import committee.nova.petphrasex.config.PetPhraseConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
 @Environment(EnvType.CLIENT)
 public class PetphraseClientX implements ClientModInitializer {
-    private static ConfigHolder<Configuration> holder;
 
     @Override
     public void onInitializeClient() {
-        holder = AutoConfig.register(Configuration.class, GsonConfigSerializer::new);
-        System.out.println("PetphraseClient initialized with config.");
+        // 模组启动时，加载本地配置文件
+        PetPhraseConfig.load();
+        System.out.println("PetPhraseX initialized with native config system.");
     }
 
-    public static Configuration getConfig() {
-        // 防止在 onInitializeClient 执行前调用此方法导致崩溃
-        if (holder == null) {
-            return new Configuration();
-        }
-        return holder.getConfig();
-    }
+    // 注意：原来的 getConfig() 方法已经不需要了。
+    // 其他类（如 Mixin）现在直接调用 PetPhraseConfig.get() 即可获取配置。
 }
