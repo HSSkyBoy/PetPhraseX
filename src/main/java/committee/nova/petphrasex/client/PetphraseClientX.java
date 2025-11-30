@@ -19,6 +19,10 @@ public class PetphraseClientX implements ClientModInitializer {
     }
 
     public static Configuration getConfig() {
+        // 防止在 onInitializeClient 执行前调用此方法导致崩溃
+        if (holder == null) {
+            return new Configuration();
+        }
         return holder.getConfig();
     }
 }
