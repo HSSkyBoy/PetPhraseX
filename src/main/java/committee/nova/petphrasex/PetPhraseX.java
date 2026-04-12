@@ -12,8 +12,6 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.client.event.ClientChatEvent;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
-import java.util.List;
-
 @Mod(PetPhraseX.MODID)
 public class PetPhraseX {
     public static final String MODID = "petphrasex";
@@ -29,11 +27,13 @@ public class PetPhraseX {
         public static void onChatMessage(ClientChatEvent event) {
             String original = event.getMessage();
 
-            String suffix = PetPhraseConfig.CLIENT.petPhrase.get();
-            @SuppressWarnings("unchecked")
-            List<String> prefixes = (List<String>) PetPhraseConfig.CLIENT.filteredPrefix.get();
+            String ignoreMark = PetPhraseConfig.CLIENT.ignoreMark.get();
+            String prefix = PetPhraseConfig.CLIENT.prefix.get();
+            String suffix = PetPhraseConfig.CLIENT.suffix.get();
+            String sPrefix = PetPhraseConfig.CLIENT.sentencePrefix.get();
+            String sSuffix = PetPhraseConfig.CLIENT.sentenceSuffix.get();
 
-            String modified = StringUtil.fillPetPhraseIn(original, suffix, prefixes);
+            String modified = StringUtil.processMessage(original, ignoreMark, prefix, suffix, sPrefix, sSuffix);
 
             if (!original.equals(modified)) {
                 event.setMessage(modified);

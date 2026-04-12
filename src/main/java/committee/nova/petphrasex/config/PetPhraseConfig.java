@@ -1,8 +1,6 @@
 package committee.nova.petphrasex.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
-import java.util.Arrays;
-import java.util.List;
 
 public class PetPhraseConfig {
     public static final ModConfigSpec CLIENT_SPEC;
@@ -15,21 +13,34 @@ public class PetPhraseConfig {
     }
 
     public static class Client {
-        public final ModConfigSpec.ConfigValue<String> petPhrase;
-        public final ModConfigSpec.ConfigValue<List<? extends String>> filteredPrefix;
+        public final ModConfigSpec.ConfigValue<String> ignoreMark;
+        public final ModConfigSpec.ConfigValue<String> prefix;
+        public final ModConfigSpec.ConfigValue<String> suffix;
+        public final ModConfigSpec.ConfigValue<String> sentencePrefix;
+        public final ModConfigSpec.ConfigValue<String> sentenceSuffix;
 
         public Client(ModConfigSpec.Builder builder) {
-            builder.comment("PetPhraseX 用户端配置").push("client");
+            builder.comment("PetPhraseX Client Config").push("client");
 
-            petPhrase = builder
-                    .comment("The suffix to add.")
-                    .define("petPhrase", " nya~");
+            ignoreMark = builder
+                    .comment("Ignore Mark")
+                    .define("ignoreMark", "#");
 
-            filteredPrefix = builder
-                    .comment("Messages starting with these will be ignored.")
-                    .defineList("filteredPrefix",
-                            Arrays.asList("/", ".", "#", "-", "+", "$"),
-                            obj -> obj instanceof String);
+            prefix = builder
+                    .comment("Message Prefix")
+                    .define("prefix", "");
+
+            suffix = builder
+                    .comment("Message Suffix")
+                    .define("suffix", " nya~; 喵~");
+
+            sentencePrefix = builder
+                    .comment("Sentence Prefix")
+                    .define("sentencePrefix", "");
+
+            sentenceSuffix = builder
+                    .comment("Sentence Suffix")
+                    .define("sentenceSuffix", "");
 
             builder.pop();
         }

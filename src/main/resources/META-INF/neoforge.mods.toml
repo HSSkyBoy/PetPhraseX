@@ -14,13 +14,13 @@ logoFile = "assets/petphrasex/icon.png"
 [[dependencies.petphrasex]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.4,)"
+versionRange = "[21.0,21.12]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.petphrasex]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.4,1.21.11]"
+versionRange = "[1.21,1.21.11]"
 ordering = "NONE"
 side = "BOTH"
