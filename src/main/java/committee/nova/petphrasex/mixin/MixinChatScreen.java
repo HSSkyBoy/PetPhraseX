@@ -1,6 +1,6 @@
 package committee.nova.petphrasex.mixin;
 
-import committee.nova.petphrasex.config.PetPhraseConfig;
+import committee.nova.petphrasex.config.PetPhraseConfigX;
 import committee.nova.petphrasex.util.StringUtil;
 import net.minecraft.client.gui.screen.ChatScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,12 +16,15 @@ public abstract class MixinChatScreen {
             argsOnly = true
     )
     private String modifyMsg(String chatMessage) {
-        PetPhraseConfig config = PetPhraseConfig.get();
+        PetPhraseConfigX config = PetPhraseConfigX.get();
 
-        return StringUtil.fillPetPhraseIn(
+        return StringUtil.processMessage(
                 chatMessage,
-                config.petPhrase,
-                config.filteredPrefix
+                config.ignoreMark,
+                config.prefix,
+                config.suffix,
+                config.sentencePrefix,
+                config.sentenceSuffix
         );
     }
 }

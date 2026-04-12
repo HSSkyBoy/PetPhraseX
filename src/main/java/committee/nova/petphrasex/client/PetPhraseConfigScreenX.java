@@ -1,6 +1,6 @@
 package committee.nova.petphrasex.client;
 
-import committee.nova.petphrasex.config.PetPhraseConfig;
+import committee.nova.petphrasex.config.PetPhraseConfigX;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -8,73 +8,61 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class PetPhraseConfigScreenX extends Screen {
     private final Screen parent;
-    private TextFieldWidget petPhraseField;
-    private TextFieldWidget prefixesField;
+    private TextFieldWidget ignoreMarkField;
+    private TextFieldWidget prefixField;
+    private TextFieldWidget suffixField;
+    private TextFieldWidget sPrefixField;
+    private TextFieldWidget sSuffixField;
 
     public PetPhraseConfigScreenX(Screen parent) {
-        super(Text.translatable("menu.petphrasex.title"));
+        super(Text.literal("PetPhraseX Configuration / 配置"));
         this.parent = parent;
     }
 
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int startY = this.height / 4;
+        int startY = 40;
+        int spacing = 30;
 
-        // 使用 ButtonWidget 模拟标签
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Pet Phrase"), button -> {})
-                .dimensions(centerX - 100, startY - 25, 200, 20).build()).active = false;
+        PetPhraseConfigX config = PetPhraseConfigX.get();
 
-        this.petPhraseField = new TextFieldWidget(this.textRenderer, centerX - 100, startY, 200, 20, Text.literal("Pet Phrase"));
-        this.petPhraseField.setMaxLength(256);
-        // 读取配置
-        this.petPhraseField.setText(PetPhraseConfig.get().petPhrase);
-        this.addDrawableChild(this.petPhraseField);
-        // 忽略前缀设置 (Prefixes)
-        this.addDrawableChild(ButtonWidget.builder(Text.literal("Prefixes (Space Split) / 忽略前缀 (用空格分隔)"), button -> {})
-                .dimensions(centerX - 100, startY + 35, 200, 20).build()).active = false;
+        this.ignoreMarkField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + 12, 200, 20, Text.of("Ignore Mark"));
+        this.ignoreMarkField.setText(config.ignoreMark);
+        this.addDrawableChild(this.ignoreMarkField);
 
-        this.prefixesField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + 60, 200, 20, Text.literal("Prefixes"));
-        this.prefixesField.setMaxLength(1024);
+        this.prefixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing + 12, 200, 20, Text.of("Prefix"));
+        this.prefixField.setText(config.prefix);
+        this.addDrawableChild(this.prefixField);
 
-        List<String> currentPrefixes = PetPhraseConfig.get().filteredPrefix;
-        String prefixStr = String.join(" ", currentPrefixes);
+        this.suffixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 2 + 12, 200, 20, Text.of("Suffix"));
+        this.suffixField.setText(config.suffix);
+        this.addDrawableChild(this.suffixField);
 
-        this.prefixesField.setText(prefixStr);
-        this.addDrawableChild(this.prefixesField);
-        // 保存
+        this.sPrefixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 3 + 12, 200, 20, Text.of("Sentence Prefix"));
+        this.sPrefixField.setText(config.sentencePrefix);
+        this.addDrawableChild(this.sPrefixField);
+
+        this.sSuffixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 4 + 12, 200, 20, Text.of("Sentence Suffix"));
+        this.sSuffixField.setText(config.sentenceSuffix);
+        this.addDrawableChild(this.sSuffixField);
+
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.save())
-                .dimensions(centerX - 105, this.height - 50, 100, 20).build());
-        // 取消
+                .dimensions(centerX - 105, this.height - 40, 100, 20).build());
         this.addDrawableChild(ButtonWidget.builder(ScreenTexts.CANCEL, button -> this.close())
-                .dimensions(centerX + 5, this.height - 50, 100, 20).build());
+                .dimensions(centerX + 5, this.height - 40, 100, 20).build());
     }
 
     private void save() {
-        PetPhraseConfig config = PetPhraseConfig.get();
-
-        // 保存口癖
-        config.petPhrase = this.petPhraseField.getText();
-
-        // 保存前缀
-        String rawPrefixes = this.prefixesField.getText();
-        // 【优化】使用正则 "\\s+" 按空白字符分割 (支持空格、Tab、多个空格)
-        List<String> newPrefixes = Arrays.stream(rawPrefixes.split("\\s+"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-
-        config.filteredPrefix = newPrefixes;
-
-        // 写入文件
-        PetPhraseConfig.save();
-
+        PetPhraseConfigX config = PetPhraseConfigX.get();
+        config.ignoreMark = this.ignoreMarkField.getText();
+        config.prefix = this.prefixField.getText();
+        config.suffix = this.suffixField.getText();
+        config.sentencePrefix = this.sPrefixField.getText();
+        config.sentenceSuffix = this.sSuffixField.getText();
+        PetPhraseConfigX.save();
         this.close();
     }
 
@@ -82,11 +70,21 @@ public class PetPhraseConfigScreenX extends Screen {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         super.render(context, mouseX, mouseY, delta);
         // Yarn 映射中 drawCenteredString 对应 drawCenteredTextWithShadow
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
+
+        int centerX = this.width / 2;
+        int startY = 40;
+        int spacing = 30;
+        int color = 0xFFA0A0A0;
+        context.drawCenteredTextWithShadow(this.textRenderer, "Ignore Mark / 忽略標記", centerX, startY + 2, color);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Message Prefix / 消息前綴", centerX, startY + spacing + 2, color);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Message Suffix / 消息後綴", centerX, startY + spacing * 2 + 2, color);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Sentence Prefix / 短句前綴", centerX, startY + spacing * 3 + 2, color);
+        context.drawCenteredTextWithShadow(this.textRenderer, "Sentence Suffix / 短句後綴", centerX, startY + spacing * 4 + 2, color);
     }
 
     @Override
     public void close() {
-        this.client.setScreen(this.parent);
+        if (this.client != null) this.client.setScreen(this.parent);
     }
 }

@@ -7,21 +7,21 @@ import net.fabricmc.loader.api.FabricLoader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class PetPhraseConfig {
+public class PetPhraseConfigX {
     private static final Path CONFIG_PATH = FabricLoader.getInstance().getConfigDir().resolve("petphrasex.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static PetPhraseConfig INSTANCE;
+    private static PetPhraseConfigX INSTANCE;
 
-    // 配置项
-    public String petPhrase = " nya~";
-    public List<String> filteredPrefix = new ArrayList<>(Arrays.asList("/", ".", "#", "-", "+", "$"));
+    // 進階配置項
+    public String ignoreMark = "#";
+    public String prefix = "";
+    public String suffix = " nya~; 喵~";
+    public String sentencePrefix = "";
+    public String sentenceSuffix = "";
 
     // 获取实例
-    public static PetPhraseConfig get() {
+    public static PetPhraseConfigX get() {
         if (INSTANCE == null) {
             load();
         }
@@ -32,13 +32,13 @@ public class PetPhraseConfig {
     public static void load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
-                INSTANCE = GSON.fromJson(Files.readString(CONFIG_PATH), PetPhraseConfig.class);
+                INSTANCE = GSON.fromJson(Files.readString(CONFIG_PATH), PetPhraseConfigX.class);
             } catch (IOException e) {
                 e.printStackTrace();
-                INSTANCE = new PetPhraseConfig();
+                INSTANCE = new PetPhraseConfigX();
             }
         } else {
-            INSTANCE = new PetPhraseConfig();
+            INSTANCE = new PetPhraseConfigX();
             save();
         }
     }
