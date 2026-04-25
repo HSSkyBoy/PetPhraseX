@@ -1,5 +1,6 @@
 package committee.nova.petphrasex.util;
 
+import committee.nova.petphrasex.config.PetPhraseConfigX;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -51,7 +52,8 @@ public class StringUtil {
     public static String processMessage(String original, String ignoreMark, String prefix, String suffix, String sPrefix, String sSuffix) {
         if (original == null || original.isEmpty()) return original;
         if (!ignoreMark.isEmpty() && original.startsWith(ignoreMark)) {
-            return original.substring(ignoreMark.length());
+            PetPhraseConfigX config = PetPhraseConfigX.get();
+            return config.removeIgnoreMark ? original.substring(ignoreMark.length()) : original;
         }
 
         // 短句處理 (以空格分隔)

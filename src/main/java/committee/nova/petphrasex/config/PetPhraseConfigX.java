@@ -15,6 +15,7 @@ public class PetPhraseConfigX {
 
     // 進階配置項
     public String ignoreMark = "#";
+    public boolean removeIgnoreMark = true;
     public String prefix = "";
     public String suffix = " nya~; 喵~";
     public String sentencePrefix = "";

@@ -1,0 +1,15 @@
+{
+  "screen.petphrasex.config.title": "PetPhraseX Configuration",
+  "screen.petphrasex.config.ignore_mark": "Ignore Mark",
+  "screen.petphrasex.config.ignore_mark.desc": "Messages starting with this mark will skip all effects.",
+  "screen.petphrasex.config.remove_ignore_mark.button": "Strip Ignore Mark: %s",
+  "screen.petphrasex.config.remove_ignore_mark.desc": "If enabled, the ignore mark will be removed before the message is sent.",
+  "screen.petphrasex.config.prefix": "Message Prefix",
+  "screen.petphrasex.config.prefix.desc": "Text added to the very beginning of the whole message.",
+  "screen.petphrasex.config.suffix": "Message Suffix",
+  "screen.petphrasex.config.suffix.desc": "Text added to the very end of the whole message.",
+  "screen.petphrasex.config.sentence_prefix": "Word Prefix",
+  "screen.petphrasex.config.sentence_prefix.desc": "Text added before every individual word in the message.",
+  "screen.petphrasex.config.sentence_suffix": "Word Suffix",
+  "screen.petphrasex.config.sentence_suffix.desc": "Text added after every individual word in the message."
+}
