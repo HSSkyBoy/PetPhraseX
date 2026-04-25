@@ -1,25 +1,25 @@
 package committee.nova.petphrasex.client;
 
 import committee.nova.petphrasex.config.PetPhraseConfigX;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 
 public class PetPhraseConfigScreenX extends Screen {
     private final Screen parent;
-    private TextFieldWidget ignoreMarkField;
-    private ButtonWidget removeIgnoreMarkButton;
+    private EditBox ignoreMarkField;
+    private Button removeIgnoreMarkButton;
     private boolean removeIgnoreMark;
-    private TextFieldWidget prefixField;
-    private TextFieldWidget suffixField;
-    private TextFieldWidget sPrefixField;
-    private TextFieldWidget sSuffixField;
+    private EditBox prefixField;
+    private EditBox suffixField;
+    private EditBox sPrefixField;
+    private EditBox sSuffixField;
 
     public PetPhraseConfigScreenX(Screen parent) {
-        super(Text.translatable("screen.petphrasex.config.title"));
+        super(Component.translatable("screen.petphrasex.config.title"));
         this.parent = parent;
     }
 
@@ -33,77 +33,82 @@ public class PetPhraseConfigScreenX extends Screen {
         PetPhraseConfigX config = PetPhraseConfigX.get();
         this.removeIgnoreMark = config.removeIgnoreMark;
 
-        this.ignoreMarkField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + 12, 200, 20, Text.translatable("screen.petphrasex.config.ignore_mark"));
-        this.ignoreMarkField.setText(config.ignoreMark);
-        this.addDrawableChild(this.ignoreMarkField);
+        this.ignoreMarkField = new EditBox(this.font, centerX - 100, startY + 12, 200, 20, Component.translatable("screen.petphrasex.config.ignore_mark"));
+        this.ignoreMarkField.setValue(config.ignoreMark);
+        this.addRenderableWidget(this.ignoreMarkField);
 
-        this.removeIgnoreMarkButton = ButtonWidget.builder(this.getRemoveIgnoreMarkButtonText(config.removeIgnoreMark), button -> {
+        this.removeIgnoreMarkButton = Button.builder(this.getRemoveIgnoreMarkButtonText(config.removeIgnoreMark), button -> {
                     this.removeIgnoreMark = !this.removeIgnoreMark;
                     button.setMessage(this.getRemoveIgnoreMarkButtonText(this.removeIgnoreMark));
                 })
-                .dimensions(centerX - 100, buttonY, 200, 20)
+                .bounds(centerX - 100, buttonY, 200, 20)
                 .build();
-        this.addDrawableChild(this.removeIgnoreMarkButton);
+        this.addRenderableWidget(this.removeIgnoreMarkButton);
 
-        this.prefixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 2 + 12, 200, 20, Text.translatable("screen.petphrasex.config.prefix"));
-        this.prefixField.setText(config.prefix);
-        this.addDrawableChild(this.prefixField);
+        this.prefixField = new EditBox(this.font, centerX - 100, startY + spacing * 2 + 12, 200, 20, Component.translatable("screen.petphrasex.config.prefix"));
+        this.prefixField.setValue(config.prefix);
+        this.addRenderableWidget(this.prefixField);
 
-        this.suffixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 3 + 12, 200, 20, Text.translatable("screen.petphrasex.config.suffix"));
-        this.suffixField.setText(config.suffix);
-        this.addDrawableChild(this.suffixField);
+        this.suffixField = new EditBox(this.font, centerX - 100, startY + spacing * 3 + 12, 200, 20, Component.translatable("screen.petphrasex.config.suffix"));
+        this.suffixField.setValue(config.suffix);
+        this.addRenderableWidget(this.suffixField);
 
-        this.sPrefixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 4 + 12, 200, 20, Text.translatable("screen.petphrasex.config.sentence_prefix"));
-        this.sPrefixField.setText(config.sentencePrefix);
-        this.addDrawableChild(this.sPrefixField);
+        this.sPrefixField = new EditBox(this.font, centerX - 100, startY + spacing * 4 + 12, 200, 20, Component.translatable("screen.petphrasex.config.sentence_prefix"));
+        this.sPrefixField.setValue(config.sentencePrefix);
+        this.addRenderableWidget(this.sPrefixField);
 
-        this.sSuffixField = new TextFieldWidget(this.textRenderer, centerX - 100, startY + spacing * 5 + 12, 200, 20, Text.translatable("screen.petphrasex.config.sentence_suffix"));
-        this.sSuffixField.setText(config.sentenceSuffix);
-        this.addDrawableChild(this.sSuffixField);
+        this.sSuffixField = new EditBox(this.font, centerX - 100, startY + spacing * 5 + 12, 200, 20, Component.translatable("screen.petphrasex.config.sentence_suffix"));
+        this.sSuffixField.setValue(config.sentenceSuffix);
+        this.addRenderableWidget(this.sSuffixField);
 
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.save())
-                .dimensions(centerX - 105, this.height - 40, 100, 20).build());
-        this.addDrawableChild(ButtonWidget.builder(ScreenTexts.CANCEL, button -> this.close())
-                .dimensions(centerX + 5, this.height - 40, 100, 20).build());
+        this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.save())
+                .bounds(centerX - 105, this.height - 40, 100, 20).build());
+        this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, button -> this.onClose())
+                .bounds(centerX + 5, this.height - 40, 100, 20).build());
     }
 
     private void save() {
         PetPhraseConfigX config = PetPhraseConfigX.get();
-        config.ignoreMark = this.ignoreMarkField.getText();
+        config.ignoreMark = this.ignoreMarkField.getValue();
         config.removeIgnoreMark = this.removeIgnoreMark;
-        config.prefix = this.prefixField.getText();
-        config.suffix = this.suffixField.getText();
-        config.sentencePrefix = this.sPrefixField.getText();
-        config.sentenceSuffix = this.sSuffixField.getText();
+        config.prefix = this.prefixField.getValue();
+        config.suffix = this.suffixField.getValue();
+        config.sentencePrefix = this.sPrefixField.getValue();
+        config.sentenceSuffix = this.sSuffixField.getValue();
         PetPhraseConfigX.save();
 
-        this.close();
+        this.onClose();
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        super.render(context, mouseX, mouseY, delta);
-        // Yarn 映射中 drawCenteredString 对应 drawCenteredTextWithShadow
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 10, 0xFFFFFF);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
+        super.extractRenderState(graphics, mouseX, mouseY, delta);
+        graphics.text(this.font, this.title, (this.width - this.font.width(this.title)) / 2, 10, 0xFFFFFF, true);
 
         int centerX = this.width / 2;
         int startY = 40;
         int spacing = 30;
         int color = 0xFFA0A0A0;
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.ignore_mark.desc"), centerX, startY + 2, color);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.remove_ignore_mark.desc"), centerX, startY + spacing + 2, color);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.prefix.desc"), centerX, startY + spacing * 2 + 2, color);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.suffix.desc"), centerX, startY + spacing * 3 + 2, color);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.sentence_prefix.desc"), centerX, startY + spacing * 4 + 2, color);
-        context.drawCenteredTextWithShadow(this.textRenderer, Text.translatable("screen.petphrasex.config.sentence_suffix.desc"), centerX, startY + spacing * 5 + 2, color);
+        Component ignoreMarkDesc = Component.translatable("screen.petphrasex.config.ignore_mark.desc");
+        graphics.text(this.font, ignoreMarkDesc, centerX - this.font.width(ignoreMarkDesc) / 2, startY + 2, color, true);
+        Component removeIgnoreMarkDesc = Component.translatable("screen.petphrasex.config.remove_ignore_mark.desc");
+        graphics.text(this.font, removeIgnoreMarkDesc, centerX - this.font.width(removeIgnoreMarkDesc) / 2, startY + spacing + 2, color, true);
+        Component prefixDesc = Component.translatable("screen.petphrasex.config.prefix.desc");
+        graphics.text(this.font, prefixDesc, centerX - this.font.width(prefixDesc) / 2, startY + spacing * 2 + 2, color, true);
+        Component suffixDesc = Component.translatable("screen.petphrasex.config.suffix.desc");
+        graphics.text(this.font, suffixDesc, centerX - this.font.width(suffixDesc) / 2, startY + spacing * 3 + 2, color, true);
+        Component sPrefixDesc = Component.translatable("screen.petphrasex.config.sentence_prefix.desc");
+        graphics.text(this.font, sPrefixDesc, centerX - this.font.width(sPrefixDesc) / 2, startY + spacing * 4 + 2, color, true);
+        Component sSuffixDesc = Component.translatable("screen.petphrasex.config.sentence_suffix.desc");
+        graphics.text(this.font, sSuffixDesc, centerX - this.font.width(sSuffixDesc) / 2, startY + spacing * 5 + 2, color, true);
     }
 
-    private Text getRemoveIgnoreMarkButtonText(boolean removeIgnoreMark) {
-        return Text.translatable("screen.petphrasex.config.remove_ignore_mark.button", Text.translatable(removeIgnoreMark ? "options.on" : "options.off"));
+    private Component getRemoveIgnoreMarkButtonText(boolean removeIgnoreMark) {
+        return Component.translatable("screen.petphrasex.config.remove_ignore_mark.button", Component.translatable(removeIgnoreMark ? "options.on" : "options.off"));
     }
 
     @Override
-    public void close() {
-        if (this.client != null) this.client.setScreen(this.parent);
+    public void onClose() {
+        if (this.minecraft != null) this.minecraft.setScreen(this.parent);
     }
 }
