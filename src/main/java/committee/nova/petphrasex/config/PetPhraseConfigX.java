@@ -20,6 +20,33 @@ public class PetPhraseConfigX {
     public String suffix = " nya~; 喵~";
     public String sentencePrefix = "";
     public String sentenceSuffix = "";
+    public boolean enableClientPhrase = true;
+    public boolean enableServerPhrase = true;
+    public ServerConditionRule[] serverConditionRules = new ServerConditionRule[]{
+            ServerConditionRule.disabled("raining", "", " wet nya~"),
+            ServerConditionRule.disabled("night", "", " good night nya~"),
+            ServerConditionRule.disabled("low_health", "", " help nya~")
+    };
+
+    public static class ServerConditionRule {
+        public boolean enabled = false;
+        public String condition = "always";
+        public String prefix = "";
+        public String suffix = "";
+        public String sentencePrefix = "";
+        public String sentenceSuffix = "";
+
+        public ServerConditionRule() {
+        }
+
+        private static ServerConditionRule disabled(String condition, String prefix, String suffix) {
+            ServerConditionRule rule = new ServerConditionRule();
+            rule.condition = condition;
+            rule.prefix = prefix;
+            rule.suffix = suffix;
+            return rule;
+        }
+    }
 
     // 获取实例
     public static PetPhraseConfigX get() {

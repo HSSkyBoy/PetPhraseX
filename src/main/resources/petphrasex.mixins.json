@@ -4,6 +4,7 @@
   "package": "committee.nova.petphrasex.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "MixinServerGamePacketListenerImpl"
   ],
   "client": [
     "MixinChatScreen"

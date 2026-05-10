@@ -50,10 +50,14 @@ public class StringUtil {
     }
 
     public static String processMessage(String original, String ignoreMark, String prefix, String suffix, String sPrefix, String sSuffix) {
+        PetPhraseConfigX config = PetPhraseConfigX.get();
+        return processMessage(original, ignoreMark, config.removeIgnoreMark, prefix, suffix, sPrefix, sSuffix);
+    }
+
+    public static String processMessage(String original, String ignoreMark, boolean removeIgnoreMark, String prefix, String suffix, String sPrefix, String sSuffix) {
         if (original == null || original.isEmpty()) return original;
         if (!ignoreMark.isEmpty() && original.startsWith(ignoreMark)) {
-            PetPhraseConfigX config = PetPhraseConfigX.get();
-            return config.removeIgnoreMark ? original.substring(ignoreMark.length()) : original;
+            return removeIgnoreMark ? original.substring(ignoreMark.length()) : original;
         }
 
         // 短句處理 (以空格分隔)
