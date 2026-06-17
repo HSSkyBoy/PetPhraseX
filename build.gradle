@@ -20,6 +20,10 @@ dependencies {
     
     // Mod Menu
     compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    testImplementation platform("org.junit:junit-bom:5.12.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 }
 
 processResources {
@@ -62,6 +66,10 @@ jar {
     from("LICENSE") {
         rename { "${it}_${project.archives_base_name}" }
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 // configure the maven publication

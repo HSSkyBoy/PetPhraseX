@@ -56,8 +56,9 @@ public class StringUtil {
 
     public static String processMessage(String original, String ignoreMark, boolean removeIgnoreMark, String prefix, String suffix, String sPrefix, String sSuffix) {
         if (original == null || original.isEmpty()) return original;
-        if (!ignoreMark.isEmpty() && original.startsWith(ignoreMark)) {
-            return removeIgnoreMark ? original.substring(ignoreMark.length()) : original;
+        String matchedIgnoreMark = findMatchedIgnoreMark(original, ignoreMark);
+        if (matchedIgnoreMark != null) {
+            return removeIgnoreMark ? original.substring(matchedIgnoreMark.length()) : original;
         }
 
         // 短句處理 (以空格分隔)
@@ -80,5 +81,18 @@ public class StringUtil {
         int insertIndex = lastTextIndex + 1;
 
         return chosenPrefix + body.substring(0, insertIndex) + chosenSuffix + body.substring(insertIndex);
+    }
+
+    private static String findMatchedIgnoreMark(String original, String ignoreMark) {
+        if (ignoreMark == null || ignoreMark.isEmpty()) return null;
+
+        String matched = null;
+        for (String candidate : splitWithEscape(ignoreMark)) {
+            if (candidate.isEmpty() || !original.startsWith(candidate)) continue;
+            if (matched == null || candidate.length() > matched.length()) {
+                matched = candidate;
+            }
+        }
+        return matched;
     }
 }

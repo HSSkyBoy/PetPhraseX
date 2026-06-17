@@ -1,7 +1,7 @@
 {
   "screen.petphrasex.config.title": "PetPhraseX 配置",
   "screen.petphrasex.config.ignore_mark": "排除標記",
-  "screen.petphrasex.config.ignore_mark.desc": "以此標記開頭的訊息將不會觸發任何效果。",
+  "screen.petphrasex.config.ignore_mark.desc": "以這些標記開頭的訊息將不會觸發任何效果；可用分號分隔多個標記。",
   "screen.petphrasex.config.remove_ignore_mark.button": "送出後移除標記：%s",
   "screen.petphrasex.config.remove_ignore_mark.desc": "若開啟，發送訊息前會自動刪除掉訊息開頭的排除標記。",
   "screen.petphrasex.config.prefix": "全句前綴",
