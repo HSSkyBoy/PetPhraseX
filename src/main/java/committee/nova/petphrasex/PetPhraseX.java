@@ -28,12 +28,13 @@ public class PetPhraseX {
             String original = event.getMessage();
 
             String ignoreMark = PetPhraseConfig.CLIENT.ignoreMark.get();
+            boolean removeIgnoreMark = PetPhraseConfig.CLIENT.removeIgnoreMark.get();
             String prefix = PetPhraseConfig.CLIENT.prefix.get();
             String suffix = PetPhraseConfig.CLIENT.suffix.get();
             String sPrefix = PetPhraseConfig.CLIENT.sentencePrefix.get();
             String sSuffix = PetPhraseConfig.CLIENT.sentenceSuffix.get();
 
-            String modified = StringUtil.processMessage(original, ignoreMark, prefix, suffix, sPrefix, sSuffix);
+            String modified = StringUtil.processMessage(original, ignoreMark, removeIgnoreMark, prefix, suffix, sPrefix, sSuffix);
 
             if (!original.equals(modified)) {
                 event.setMessage(modified);

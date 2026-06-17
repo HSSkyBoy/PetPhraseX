@@ -14,6 +14,7 @@ public class PetPhraseConfig {
 
     public static class Client {
         public final ModConfigSpec.ConfigValue<String> ignoreMark;
+        public final ModConfigSpec.BooleanValue removeIgnoreMark;
         public final ModConfigSpec.ConfigValue<String> prefix;
         public final ModConfigSpec.ConfigValue<String> suffix;
         public final ModConfigSpec.ConfigValue<String> sentencePrefix;
@@ -25,6 +26,10 @@ public class PetPhraseConfig {
             ignoreMark = builder
                     .comment("Ignore Mark")
                     .define("ignoreMark", "#");
+
+            removeIgnoreMark = builder
+                    .comment("Remove Ignore Mark before sending")
+                    .define("removeIgnoreMark", true);
 
             prefix = builder
                     .comment("Message Prefix")

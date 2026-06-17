@@ -75,6 +75,10 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.2"
 }
 
+test {
+    useJUnitPlatform()
+}
+
 processResources {
     inputs.property 'version', modVersion
 
