@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 
 public class PetPhraseConfigScreenX extends Screen {
     private final Screen parent;
+    private boolean forcedByServer;
     private EditBox ignoreMarkField;
     private Button removeIgnoreMarkButton;
     private boolean removeIgnoreMark;
@@ -29,6 +30,7 @@ public class PetPhraseConfigScreenX extends Screen {
         int startY = 40;
         int spacing = 30;
         int buttonY = startY + spacing + 12;
+        this.forcedByServer = ServerForcedPhraseState.isForcedByServer();
 
         PetPhraseConfigX config = PetPhraseConfigX.get();
         this.removeIgnoreMark = config.removeIgnoreMark;
@@ -61,6 +63,20 @@ public class PetPhraseConfigScreenX extends Screen {
         this.sSuffixField.setValue(config.sentenceSuffix);
         this.addRenderableWidget(this.sSuffixField);
 
+        if (this.forcedByServer) {
+            this.ignoreMarkField.setEditable(false);
+            this.removeIgnoreMarkButton.active = false;
+            this.prefixField.setEditable(false);
+            this.suffixField.setEditable(false);
+            this.sPrefixField.setEditable(false);
+            this.sSuffixField.setEditable(false);
+            this.addRenderableWidget(Button.builder(Component.translatable("screen.petphrasex.config.reclaim"), button -> {
+                        button.active = !ServerFeatureHooks.sendReclaimRequest();
+                    })
+                    .bounds(centerX - 100, this.height - 64, 200, 20)
+                    .build());
+        }
+
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, button -> this.save())
                 .bounds(centerX - 105, this.height - 40, 100, 20).build());
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, button -> this.onClose())
@@ -84,6 +100,10 @@ public class PetPhraseConfigScreenX extends Screen {
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         super.extractRenderState(graphics, mouseX, mouseY, delta);
         graphics.text(this.font, this.title, (this.width - this.font.width(this.title)) / 2, 10, 0xFFFFFF, true);
+        if (this.forcedByServer) {
+            Component warning = Component.translatable("screen.petphrasex.config.forced_warning");
+            graphics.text(this.font, warning, (this.width - this.font.width(warning)) / 2, 24, 0xFFFF5555, true);
+        }
 
         int centerX = this.width / 2;
         int startY = 40;

@@ -1,6 +1,8 @@
 package committee.nova.petphrasex.server;
 
 import committee.nova.petphrasex.config.PetPhraseConfigX;
+import committee.nova.petphrasex.server.forced.ForcedPhraseData;
+import committee.nova.petphrasex.server.forced.ForcedPhraseManager;
 import committee.nova.petphrasex.util.StringUtil;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -10,6 +12,19 @@ public final class PetPhraseServerProcessor {
     }
 
     public static String process(ServerPlayer player, String message) {
+        ForcedPhraseData forcedData = ForcedPhraseManager.getActive(player);
+        if (forcedData != null) {
+            return StringUtil.processMessage(
+                    message,
+                    forcedData.ignoreMark(),
+                    forcedData.removeIgnoreMark(),
+                    forcedData.prefix(),
+                    forcedData.suffix(),
+                    forcedData.sentencePrefix(),
+                    forcedData.sentenceSuffix()
+            );
+        }
+
         PetPhraseConfigX config = PetPhraseConfigX.get();
         if (!config.enableServerPhrase) return message;
 

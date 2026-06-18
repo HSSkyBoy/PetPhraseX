@@ -11,5 +11,7 @@
   "screen.petphrasex.config.sentence_prefix": "Word Prefix",
   "screen.petphrasex.config.sentence_prefix.desc": "Text added before every individual word in the message.",
   "screen.petphrasex.config.sentence_suffix": "Word Suffix",
-  "screen.petphrasex.config.sentence_suffix.desc": "Text added after every individual word in the message."
+  "screen.petphrasex.config.sentence_suffix.desc": "Text added after every individual word in the message.",
+  "screen.petphrasex.config.forced_warning": "This server is overriding your phrase settings.",
+  "screen.petphrasex.config.reclaim": "Use my local settings instead"
 }

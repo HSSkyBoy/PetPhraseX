@@ -11,5 +11,7 @@
   "screen.petphrasex.config.sentence_prefix": "词汇前缀",
   "screen.petphrasex.config.sentence_prefix.desc": "插入在消息中每个词前面的文字。",
   "screen.petphrasex.config.sentence_suffix": "词汇后缀",
-  "screen.petphrasex.config.sentence_suffix.desc": "插入在消息中每个词后面的文字。"
+  "screen.petphrasex.config.sentence_suffix.desc": "插入在消息中每个词后面的文字。",
+  "screen.petphrasex.config.forced_warning": "此服务器已强制覆写你的口癖设置。",
+  "screen.petphrasex.config.reclaim": "改用我的本地设置"
 }
