@@ -43,13 +43,4 @@ public enum ForcedPhraseField {
     }
 
     abstract ForcedPhraseData apply(ForcedPhraseData data, String value);
-
-    public static ForcedPhraseField fromCommandName(String commandName) {
-        for (ForcedPhraseField field : values()) {
-            if (field.commandName.equalsIgnoreCase(commandName)) {
-                return field;
-            }
-        }
-        return null;
-    }
 }

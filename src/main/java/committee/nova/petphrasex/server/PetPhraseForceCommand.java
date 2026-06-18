@@ -1,11 +1,11 @@
 package committee.nova.petphrasex.server;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import committee.nova.petphrasex.server.forced.ForcedPhraseData;
 import committee.nova.petphrasex.server.forced.ForcedPhraseField;
 import committee.nova.petphrasex.server.forced.ForcedPhraseManager;
 import net.minecraft.commands.CommandBuildContext;
@@ -23,25 +23,30 @@ public final class PetPhraseForceCommand {
     }
 
     public static void register(com.mojang.brigadier.CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registryAccess, Commands.CommandSelection environment) {
-        dispatcher.register(Commands.literal("petphrasex")
+        dispatcher.register(buildRoot("petphrasex"));
+        dispatcher.register(buildRoot("ppx"));
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> buildRoot(String name) {
+        LiteralArgumentBuilder<CommandSourceStack> setNode = Commands.literal("set");
+        for (ForcedPhraseField field : ForcedPhraseField.values()) {
+            setNode.then(Commands.literal(field.commandName())
+                    .then(Commands.argument("value", StringArgumentType.greedyString())
+                            .executes(context -> setField(context, field))));
+        }
+
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal(name)
                 .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_MODERATOR))
                 .then(Commands.literal("force")
                         .then(Commands.argument("player", EntityArgument.player())
-                                .then(Commands.literal("set")
-                                        .then(Commands.argument("field", StringArgumentType.word())
-                                                .then(Commands.argument("value", StringArgumentType.greedyString())
-                                                        .executes(PetPhraseForceCommand::setField))))
+                                .then(setNode)
                                 .then(Commands.literal("clear").executes(PetPhraseForceCommand::clear))
-                                .then(Commands.literal("view").executes(PetPhraseForceCommand::view)))));
+                                .then(Commands.literal("view").executes(PetPhraseForceCommand::view))));
+        return root;
     }
 
-    private static int setField(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+    private static int setField(CommandContext<CommandSourceStack> context, ForcedPhraseField field) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        ForcedPhraseField field = ForcedPhraseField.fromCommandName(StringArgumentType.getString(context, "field"));
-        if (field == null) {
-            throw UNKNOWN_FIELD.create();
-        }
-
         String value = StringArgumentType.getString(context, "value");
         ForcedPhraseManager.setField(player, field, value);
         context.getSource().sendSuccess(() -> Component.literal("Set " + field.commandName() + " for " + player.getName().getString() + "."), true);
@@ -62,7 +67,7 @@ public final class PetPhraseForceCommand {
 
     private static int view(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
-        ForcedPhraseData data = ForcedPhraseManager.get(player);
+        var data = ForcedPhraseManager.get(player);
         if (data == null) {
             context.getSource().sendSuccess(() -> Component.literal(player.getName().getString() + " has no forced phrase settings."), false);
             return Command.SINGLE_SUCCESS;
