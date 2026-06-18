@@ -15,7 +15,7 @@ public record ForcedPhraseSyncPayload(
         String sentencePrefix,
         String sentenceSuffix
 ) implements CustomPacketPayload {
-    public static final Type<ForcedPhraseSyncPayload> TYPE = CustomPacketPayload.createType("petphrasex:forced_phrase_sync");
+    public static final Type<ForcedPhraseSyncPayload> TYPE = CustomPacketPayload.createType("forced_phrase_sync");
     public static final StreamCodec<RegistryFriendlyByteBuf, ForcedPhraseSyncPayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL,
             ForcedPhraseSyncPayload::forcedByServer,
