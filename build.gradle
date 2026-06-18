@@ -17,6 +17,7 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     
     // Mod Menu
     compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"

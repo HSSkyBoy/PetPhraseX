@@ -34,6 +34,9 @@
     "minecraft": ">=26.1 <26.2",
     "java": ">=25"
   },
+  "suggests": {
+    "fabric-api": "*"
+  },
   "custom": {
     "modmenu": {
       "links": {
