@@ -3,6 +3,7 @@ package committee.nova.petphrasex.server.forced;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import committee.nova.petphrasex.config.PetPhraseConfigX;
+import committee.nova.petphrasex.config.PhraseSettings;
 
 public record ForcedPhraseData(
         boolean active,
@@ -24,15 +25,23 @@ public record ForcedPhraseData(
     ).apply(instance, ForcedPhraseData::new));
 
     public static ForcedPhraseData fromConfig(PetPhraseConfigX config) {
+        return fromPhraseSettings(true, config.phraseSettings());
+    }
+
+    public static ForcedPhraseData fromPhraseSettings(boolean active, PhraseSettings settings) {
         return new ForcedPhraseData(
-                true,
-                normalize(config.ignoreMark),
-                config.removeIgnoreMark,
-                normalize(config.prefix),
-                normalize(config.suffix),
-                normalize(config.sentencePrefix),
-                normalize(config.sentenceSuffix)
+                active,
+                normalize(settings.ignoreMark()),
+                settings.removeIgnoreMark(),
+                normalize(settings.prefix()),
+                normalize(settings.suffix()),
+                normalize(settings.sentencePrefix()),
+                normalize(settings.sentenceSuffix())
         );
+    }
+
+    public PhraseSettings phraseSettings() {
+        return new PhraseSettings(ignoreMark, removeIgnoreMark, prefix, suffix, sentencePrefix, sentenceSuffix);
     }
 
     public ForcedPhraseData withActive(boolean active) {

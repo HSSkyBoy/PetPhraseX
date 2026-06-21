@@ -1,6 +1,7 @@
 package committee.nova.petphrasex.server;
 
 import committee.nova.petphrasex.config.PetPhraseConfigX;
+import committee.nova.petphrasex.config.PhraseSettings;
 import committee.nova.petphrasex.server.forced.ForcedPhraseData;
 import committee.nova.petphrasex.server.forced.ForcedPhraseManager;
 import committee.nova.petphrasex.util.StringUtil;
@@ -14,15 +15,7 @@ public final class PetPhraseServerProcessor {
     public static String process(ServerPlayer player, String message) {
         ForcedPhraseData forcedData = ForcedPhraseManager.getActive(player);
         if (forcedData != null) {
-            return StringUtil.processMessage(
-                    message,
-                    forcedData.ignoreMark(),
-                    forcedData.removeIgnoreMark(),
-                    forcedData.prefix(),
-                    forcedData.suffix(),
-                    forcedData.sentencePrefix(),
-                    forcedData.sentenceSuffix()
-            );
+            return StringUtil.processMessage(message, forcedData.phraseSettings());
         }
 
         PetPhraseConfigX config = PetPhraseConfigX.get();
@@ -30,26 +23,11 @@ public final class PetPhraseServerProcessor {
 
         PetPhraseConfigX.ServerConditionRule rule = getFirstMatchedRule(config, player);
         if (rule != null) {
-            return StringUtil.processMessage(
-                    message,
-                    config.ignoreMark,
-                    config.removeIgnoreMark,
-                    rule.prefix,
-                    rule.suffix,
-                    rule.sentencePrefix,
-                    rule.sentenceSuffix
-            );
+            return StringUtil.processMessage(message, rule.phraseSettings(config));
         }
 
-        return StringUtil.processMessage(
-                message,
-                config.ignoreMark,
-                config.removeIgnoreMark,
-                config.prefix,
-                config.suffix,
-                config.sentencePrefix,
-                config.sentenceSuffix
-        );
+        PhraseSettings settings = config.phraseSettings();
+        return StringUtil.processMessage(message, settings);
     }
 
     private static PetPhraseConfigX.ServerConditionRule getFirstMatchedRule(PetPhraseConfigX config, ServerPlayer player) {

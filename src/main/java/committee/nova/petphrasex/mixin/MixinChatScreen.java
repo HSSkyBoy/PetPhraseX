@@ -23,14 +23,6 @@ public abstract class MixinChatScreen {
         if (ServerForcedPhraseState.isForcedByServer()) return chatMessage;
         if (Minecraft.getInstance().hasSingleplayerServer()) return chatMessage;
 
-        return StringUtil.processMessage(
-                chatMessage,
-                config.ignoreMark,
-                config.removeIgnoreMark,
-                config.prefix,
-                config.suffix,
-                config.sentencePrefix,
-                config.sentenceSuffix
-        );
+        return StringUtil.processMessage(chatMessage, config.phraseSettings());
     }
 }

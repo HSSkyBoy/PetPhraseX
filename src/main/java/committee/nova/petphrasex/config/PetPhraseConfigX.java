@@ -46,6 +46,30 @@ public class PetPhraseConfigX {
             rule.suffix = suffix;
             return rule;
         }
+
+        public PhraseSettings phraseSettings(PetPhraseConfigX config) {
+            return new PhraseSettings(
+                    config.ignoreMark,
+                    config.removeIgnoreMark,
+                    prefix,
+                    suffix,
+                    sentencePrefix,
+                    sentenceSuffix
+            );
+        }
+    }
+
+    public PhraseSettings phraseSettings() {
+        return new PhraseSettings(ignoreMark, removeIgnoreMark, prefix, suffix, sentencePrefix, sentenceSuffix);
+    }
+
+    public void applyPhraseSettings(PhraseSettings settings) {
+        ignoreMark = settings.ignoreMark();
+        removeIgnoreMark = settings.removeIgnoreMark();
+        prefix = settings.prefix();
+        suffix = settings.suffix();
+        sentencePrefix = settings.sentencePrefix();
+        sentenceSuffix = settings.sentenceSuffix();
     }
 
     // 获取实例
